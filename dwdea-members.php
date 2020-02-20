@@ -29,7 +29,7 @@ along with dwdea-members. If not, see https://www.gnu.org/licenses/gpl-2.0.html.
 
 defined('ABSPATH') or die('Hey, what are you doing here? You silly human');
 
-class DwdeaMember
+class Dwdea_Members
 {
     public function __construct()
     {
@@ -69,17 +69,23 @@ class DwdeaMember
     {
         add_menu_page('Dwdea Members', 'Dwdea Members', '', 'dwdea-members', [$this, 'add_new_page'], '', 25);
         add_submenu_page('dwdea-members', 'Add Dwdea Members', 'Add New', 'manage_options', 'new-dwdea-members', [$this, 'add_new_page']);
-        // add_submenu_page('dwdea-members', 'Dwdea Members List', 'Member List', 'manage_options', 'dwdea-members-list', '' );
+        add_submenu_page('dwdea-members', 'Dwdea Members List', 'All Members', 'manage_options', 'dwdea-members-list', [$this,'all_member_page'] );
     }
 
     public function add_new_page()
     {
-        include_once 'views/add_new_member.php';
+        require_once 'views/add_new_member.php';
+    }
+
+    public function all_member_page()
+    {
+        exit;
+        require_once 'views/all_members.php';
     }
 
 } //End class
 
-$dwdea_member = new DwdeaMember();
+$dwdea_member = new Dwdea_Members();
 
 //Active plugin
 register_activation_hook(__FILE__, [$dwdea_member, 'active']);
