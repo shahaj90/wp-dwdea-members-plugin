@@ -14,6 +14,7 @@ Markdown parsed.
 == Installation == 
 
 This section describes how to install the plugin and get it working.
+
 e.g.
 
 1. Upload `dwdea-members` to the `/wp-content/plugins/` directory
