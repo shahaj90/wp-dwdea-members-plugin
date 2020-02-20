@@ -33,8 +33,9 @@ class DwdeaMember
 {
     public function __construct()
     {
-    	session_start();
-        add_action('admin_menu', [$this,'my_menu']);
+        session_start();
+        require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+        add_action('admin_menu', [$this, 'my_menu']);
     }
 
     public function active()
@@ -44,25 +45,24 @@ class DwdeaMember
 
     public function create_db()
     {
-    	global $wpdb;
+        global $wpdb;
         $charset_collate = $wpdb->get_charset_collate();
         $table_name      = "{$wpdb->prefix}dwdea_members";
+        $sql             = "CREATE TABLE IF NOT EXISTS $table_name (
+        `id` bigint(11) unsigned NOT NULL AUTO_INCREMENT,
+        `name` varchar(255),
+        `father_name` varchar(255),
+        `mobile` varchar(255),
+        `description` text DEFAULT NULL,
+        `status` TINYINT(10)  DEFAULT '3' COMMENT '1=Died, 2=Retired, 3=Alive',
+        `created_by` bigint(20),
+        `updated_by` bigint(20) DEFAULT NULL,
+        `created_at` datetime,
+        `updated_at` datetime DEFAULT NULL,
+        PRIMARY KEY  (id)
+    ) $charset_collate;";
 
-        $sql = "CREATE TABLE IF NOT EXISTS $table_name (
-		`id` bigint(11) unsigned NOT NULL AUTO_INCREMENT,
-		`name` varchar(255),
-		`father_name` varchar(255),
-		`mobile` varchar(255),
-		`description` text DEFAULT NULL,
-		`status` TINYINT(10)  DEFAULT '3' COMMENT '1=Died, 2=Retired, 3=Alive',
-		`created_by` bigint(20),
-		`updated_by` bigint(20),
-		`created_at` varchar(255),
-		`updated_at` varchar(255) DEFAULT NULL,
-		PRIMARY KEY  (id)
-	) $charset_collate;";
-
-        $wpdb->query($sql);
+        dbDelta($sql);
     }
 
     public function my_menu()
