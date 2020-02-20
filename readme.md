@@ -19,5 +19,4 @@ e.g.
 
 1. Upload `dwdea-members` to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Place `&amp;amp;amp;lt;?php do_action('plugin_name_hook'); ?&amp;amp;amp;gt;` in your templates
-4. Enjoy!
+3. Enjoy!
