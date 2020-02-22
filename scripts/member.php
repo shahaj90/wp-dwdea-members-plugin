@@ -8,3 +8,9 @@ if (isset($_POST['save'])) {
     $store = $members->store();
     return $store;
 }
+
+if (isset($_POST['update'])) {
+    $update = $members->update();
+    return $store;
+}
+

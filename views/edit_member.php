@@ -1,6 +1,6 @@
 <div class="wrap">
 	<h1 id="add-new-user">
-		Add New Member
+		Update Member
 	</h1>
 
 	<?php if (!empty($_SESSION['message'])): ?>
@@ -12,11 +12,12 @@
 		<table class="form-table" role="presentation">
 			<tbody>
 				<tr class="form-field form-required">
+					<input type="hidden" name="id" value="<?php echo $data->id; ?>">
 					<th scope="row">
 						<label for="name">Name</label>
 					</th>
 					<td>
-						<input name="name" type="text" id="name" value="" aria-required="true" autocapitalize="none" autocorrect="off" maxlength="60" required>
+						<input name="name" type="text" id="name" value="<?php echo $data->name; ?>" aria-required="true" autocapitalize="none" autocorrect="off" maxlength="60" required>
 					</td>
 				</tr>
 				<tr class="form-field form-required">
@@ -24,7 +25,7 @@
 						<label for="f_name">Father name</label>
 					</th>
 					<td>
-						<input name="f_name" type="text" id="f_name" value="" aria-required="true" autocapitalize="none" autocorrect="off" maxlength="60" required>
+						<input name="f_name" type="text" id="f_name" value="<?php echo $data->father_name; ?>" aria-required="true" autocapitalize="none" autocorrect="off" maxlength="60" required>
 					</td>
 				</tr>
 				<tr class="form-field form-required">
@@ -32,7 +33,7 @@
 						<label for="mobile">Mobile</label>
 					</th>
 					<td>
-						<input name="mobile" type="text" id="mobile" value="" aria-required="true" autocapitalize="none" autocorrect="off" maxlength="60" required>
+						<input name="mobile" type="text" id="mobile" value="<?php echo $data->mobile; ?>" aria-required="true" autocapitalize="none" autocorrect="off" maxlength="60" required>
 					</td>
 				</tr>
 				<tr class="form-field">
@@ -41,9 +42,9 @@
 					</th>
 					<td>
 						<select name="status" id="status" required>
-							<option value="1">Died</option>
-							<option value="2">Retired</option>
-							<option value="3">Active</option>
+							<option <?php if ($data->status == 1) {echo "selected";}?> value="1">Died</option>
+							<option <?php if ($data->status == 2) {echo "selected";}?> value="2">Retired</option>
+							<option <?php if ($data->status == 3) {echo "selected";}?> value="3">Active</option>
 						</select>
 					</td>
 				</tr>
@@ -52,7 +53,7 @@
 						<label for="comments">Comments</label>
 					</th>
 					<td>
-						<textarea name="comments" id="comments" value="" aria-required="true" autocapitalize="none" autocorrect="off" maxlength="60"></textarea>
+						<textarea name="comments" id="comments" aria-required="true" autocapitalize="none" autocorrect="off" maxlength="60"><?php echo $data->description; ?></textarea>
 					</td>
 				</tr>
 			</tbody>
@@ -60,7 +61,7 @@
 
 
 		<p class="submit">
-			<input type="submit" name="save" id="save" class="button button-primary" value="Save">
+			<input type="submit" name="update" id="update" class="button button-primary" value="Update">
 		</p>
 	</form>
 </div>
@@ -73,7 +74,7 @@
 			width: 38%;
 		}
 
-		#save{
+		#update{
 			margin-left: 520px;
 		}
 	}

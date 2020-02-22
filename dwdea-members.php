@@ -36,6 +36,7 @@ class Dwdea_Members
         session_start();
         require_once ABSPATH . 'wp-admin/includes/upgrade.php';
         add_action('admin_menu', [$this, 'my_menu']);
+        add_action( 'admin_enqueue_scripts', [$this,'enqueue']);
     }
 
     public function active()
@@ -69,7 +70,12 @@ class Dwdea_Members
     {
         add_menu_page('Dwdea Members', 'Dwdea Members', '', 'dwdea-members', [$this, 'add_new_page'], '', 25);
         add_submenu_page('dwdea-members', 'Add Dwdea Members', 'Add New', 'manage_options', 'new-dwdea-members', [$this, 'add_new_page']);
-        add_submenu_page('dwdea-members', 'Dwdea Members List', 'All Members', 'manage_options', 'dwdea-members-list', [$this,'all_member_page'] );
+        add_submenu_page('dwdea-members', 'Dwdea Members List', 'All Members', 'manage_options', 'dwdea-members-list', [$this, 'all_member_page']);
+    }
+
+    public function enqueue()
+    {
+        wp_enqueue_script( 'member', plugins_url('/public/js/pages/member.js', __FILE__ ));
     }
 
     public function add_new_page()
@@ -79,8 +85,11 @@ class Dwdea_Members
 
     public function all_member_page()
     {
-        exit;
+        // ob_start();
         require_once 'views/all_members.php';
+        // $templete = ob_get_contents();
+        // ob_end_clean();
+        // echo $templete;
     }
 
 } //End class
