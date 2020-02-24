@@ -1,10 +1,16 @@
 <?php
+if (!defined('ABSPATH')) {
+    $path = preg_replace('/wp-content.*$/', '', __DIR__);
+    require_once $path . 'wp-load.php';
+}
+
 if (!class_exists('WP_List_Table')) {
     require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
 }
 
-class Member_List_Table extends WP_List_Table
+class Member_Wp_List extends WP_List_Table
 {
+
     public function get_members()
     {
         global $wpdb;
@@ -99,48 +105,48 @@ class Member_List_Table extends WP_List_Table
         return sprintf('%1$s %2$s', $item['name'], $this->row_actions($actions));
     }
 
-    public function edit_member()
+    public function edit()
     {
         global $wpdb;
         $data = $wpdb->get_row("SELECT * from {$wpdb->prefix}dwdea_members WHERE id={$_GET['id']}", OBJECT);
-        require_once 'edit_member.php';
+        
+        require_once PLUGIN_PATH.'views/member_edit.php';
     }
 
-    public function delete_member()
+    public static function delete()
     {
-        global $wpdb;
-        $delete = $wpdb->delete("{$wpdb->prefix}dwdea_members", ['id' => $_GET['id']]);
-        if ($delete > 0) {
-            $_SESSION['message'] = '<div id="message" class="updated notice is-dismissible"><p>Member delete successfully.</p></div>';
-        } else {
-            $_SESSION['message'] = '<div id="message" class="error notice is-dismissible"><p>Member delete falied.</p></div>';
-        }
-
+        // exit;
         // require_once ABSPATH.'wp-load.php';
-
-        wp_redirect(admin_url('admin.php?page=dwdea-members-list'), 302);
-        exit;
+        // global $wpdb;
+        // $delete = $wpdb->delete("{$wpdb->prefix}dwdea_members", ['id' => $_GET['id']]);
+        // if ($delete > 0) {
+        //     $_SESSION['message'] = '<div id="message" class="updated notice is-dismissible"><p>Member delete successfully.</p></div>';
+        // } else {
+        //     $_SESSION['message'] = '<div id="message" class="error notice is-dismissible"><p>Member delete falied.</p></div>';
+        // }
+        require_once 'delete_member.php';
     }
 }
 
-function render_member_list_page()
+function member_wp_list_table()
 {
-    $member_table = new Member_List_Table();
+    $member_table = new Member_Wp_List();
 
     //Edit operation
     if (!empty($_GET['action']) && $_GET['action'] == 'edit' && !empty($_GET['id'])) {
-        $member_table->edit_member();
+        $member_table->edit();
         exit;
     }
 
     //Delete operation
     if (!empty($_GET['action']) && $_GET['action'] == 'delete' && !empty($_GET['id'])) {
-        $member_table->delete_member();
-        exit;
+
     }
 
     //Show WP list table
-    echo '<div class="wrap"><h2>Member List</h2>';
+    echo '<div class="wrap">';
+    echo '<h2>Member List</h2>';
+
     // message
     if (!empty($_SESSION['message'])) {
         echo "<div>{$_SESSION['message']}</div>";
@@ -149,10 +155,11 @@ function render_member_list_page()
 
     // echo '<form method="post">';
     // echo '<input type="hidden" name="page" value="member_list">';
+
     $member_table->prepare_items();
     // $member_table->search_box('search', 'search_id');
     $member_table->display();
     echo '</div>';
 }
 
-render_member_list_page();
+member_wp_list_table();

@@ -1,16 +1,21 @@
 <?php
-if (!class_exists('Members')) {
-    require_once '../classes/member_class.php';
-    $members = new Members();
+
+if (!class_exists('Member')) {
+    require_once '../includes/class_member.php';
+    $member = new Member();
 }
 
 if (isset($_POST['save'])) {
-    $store = $members->store();
-    return $store;
+    $save = $member->save();
+    return $save;
 }
 
 if (isset($_POST['update'])) {
-    $update = $members->update();
-    return $store;
+    $update = $member->update();
+    return $update;
 }
 
+if (isset($_POST['delete'])) {
+    $delete = $member->delete();
+    return $delete;
+}

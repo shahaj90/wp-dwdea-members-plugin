@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       dwdea-members
  * Plugin URI:        http://dwdea.org
- * Description:       Easily handle only dhaka wasa engineering members(Bangladesh)
+ * Description:       Easy handle to dhaka wasa engineering members(Bangladesh)
  * Version:           1.0
  * Requires at least: 5.2
  * Requires PHP:      7.2
@@ -28,23 +28,22 @@ along with dwdea-members. If not, see https://www.gnu.org/licenses/gpl-2.0.html.
  */
 
 defined('ABSPATH') or die('Hey, what are you doing here? You silly human');
+define('PLUGIN_PATH', plugin_dir_path(__FILE__));
+
+require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+// require_once 'includes/class_member.php';
 
 class Dwdea_Members
 {
+	var $member;
     public function __construct()
     {
         session_start();
-        require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-        add_action('admin_menu', [$this, 'my_menu']);
-        add_action( 'admin_enqueue_scripts', [$this,'enqueue']);
+        add_action('admin_menu', [$this, 'admin_menu']);
+        add_action('admin_enqueue_scripts', [$this, 'enqueue']);
     }
 
-    public function active()
-    {
-        $this->create_db();
-    }
-
-    public function create_db()
+    public function activate()
     {
         global $wpdb;
         $charset_collate = $wpdb->get_charset_collate();
@@ -66,35 +65,31 @@ class Dwdea_Members
         dbDelta($sql);
     }
 
-    public function my_menu()
+    public function admin_menu()
     {
-        add_menu_page('Dwdea Members', 'Dwdea Members', '', 'dwdea-members', [$this, 'add_new_page'], '', 25);
-        add_submenu_page('dwdea-members', 'Add Dwdea Members', 'Add New', 'manage_options', 'new-dwdea-members', [$this, 'add_new_page']);
-        add_submenu_page('dwdea-members', 'Dwdea Members List', 'All Members', 'manage_options', 'dwdea-members-list', [$this, 'all_member_page']);
+        add_menu_page('Add Member', 'DWDEA Member', '', 'dwdea-members', [$this, 'member_add'], '', 25);
+        add_submenu_page('dwdea-members', 'Add Member', 'Add Member', 'manage_options', 'new-member', [$this, 'member_add']);
+        add_submenu_page('dwdea-members', 'Member List', 'Member List', 'manage_options', 'member-list', [$this, 'member_list']);
     }
 
     public function enqueue()
     {
-        wp_enqueue_script( 'member', plugins_url('/public/js/pages/member.js', __FILE__ ));
+        wp_enqueue_script('member-js', plugins_url('/public/js/members.js', __FILE__));
     }
 
-    public function add_new_page()
+    public function member_add()
     {
-        require_once 'views/add_new_member.php';
+        require_once 'views/member_add.php';
     }
 
-    public function all_member_page()
-    {
-        // ob_start();
-        require_once 'views/all_members.php';
-        // $templete = ob_get_contents();
-        // ob_end_clean();
-        // echo $templete;
+    public function member_list()
+    {    	
+        require_once 'includes/class_member_wp_list_table.php';
     }
 
 } //End class
 
-$dwdea_member = new Dwdea_Members();
+$dwdea_members = new Dwdea_Members();
 
-//Active plugin
-register_activation_hook(__FILE__, [$dwdea_member, 'active']);
+//Activation plugin
+register_activation_hook(__FILE__, [$dwdea_members, 'activate']);

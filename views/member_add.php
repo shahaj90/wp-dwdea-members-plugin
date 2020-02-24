@@ -32,7 +32,7 @@
 						<label for="mobile">Mobile</label>
 					</th>
 					<td>
-						<input name="mobile" type="text" id="mobile" value="" aria-required="true" autocapitalize="none" autocorrect="off" maxlength="60" required>
+						<input name="mobile" type="number" id="mobile" value="" aria-required="true" autocapitalize="none" autocorrect="off" required>
 					</td>
 				</tr>
 				<tr class="form-field">
