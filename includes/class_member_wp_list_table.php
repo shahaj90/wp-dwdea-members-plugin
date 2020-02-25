@@ -109,22 +109,35 @@ class Member_Wp_List extends WP_List_Table
     {
         global $wpdb;
         $data = $wpdb->get_row("SELECT * from {$wpdb->prefix}dwdea_members WHERE id={$_GET['id']}", OBJECT);
-        
-        require_once PLUGIN_PATH.'views/member_edit.php';
+
+        require_once PLUGIN_PATH . 'views/member_edit.php';
     }
 
-    public static function delete()
+    public function delete()
     {
-        // exit;
-        // require_once ABSPATH.'wp-load.php';
-        // global $wpdb;
-        // $delete = $wpdb->delete("{$wpdb->prefix}dwdea_members", ['id' => $_GET['id']]);
-        // if ($delete > 0) {
-        //     $_SESSION['message'] = '<div id="message" class="updated notice is-dismissible"><p>Member delete successfully.</p></div>';
-        // } else {
-        //     $_SESSION['message'] = '<div id="message" class="error notice is-dismissible"><p>Member delete falied.</p></div>';
-        // }
-        require_once 'delete_member.php';
+        global $wpdb;
+        $delete = $wpdb->delete("{$wpdb->prefix}dwdea_members", ['id' => $_GET['id']]);
+        if ($delete > 0) {
+            $_SESSION['message'] = '<div id="message" class="updated notice is-dismissible"><p>Member delete successfully.</p></div>';
+        } else {
+            $_SESSION['message'] = '<div id="message" class="error notice is-dismissible"><p>Member delete falied.</p></div>';
+        }        
+
+        $this->redirect(admin_url('admin.php?page=member-list'));
+    }
+
+    public function redirect($filename)
+    {
+        if (!headers_sent()) {
+            header('Location: ' . $filename);
+        } else {
+            echo '<script type="text/javascript">';
+            echo 'window.location.href="' . $filename . '";';
+            echo '</script>';
+            echo '<noscript>';
+            echo '<meta http-equiv="refresh" content="0;url=' . $filename . '" />';
+            echo '</noscript>';
+        }
     }
 }
 
@@ -140,6 +153,8 @@ function member_wp_list_table()
 
     //Delete operation
     if (!empty($_GET['action']) && $_GET['action'] == 'delete' && !empty($_GET['id'])) {
+        $member_table->delete();
+        exit;
 
     }
 

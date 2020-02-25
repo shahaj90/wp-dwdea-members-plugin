@@ -31,11 +31,10 @@ defined('ABSPATH') or die('Hey, what are you doing here? You silly human');
 define('PLUGIN_PATH', plugin_dir_path(__FILE__));
 
 require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-// require_once 'includes/class_member.php';
 
 class Dwdea_Members
 {
-	var $member;
+    public $member;
     public function __construct()
     {
         session_start();
@@ -74,7 +73,7 @@ class Dwdea_Members
 
     public function enqueue()
     {
-        wp_enqueue_script('member-js', plugins_url('/public/js/members.js', __FILE__));
+        wp_enqueue_script('member-js', plugins_url('/public/js/member.js', __FILE__));
     }
 
     public function member_add()
@@ -83,7 +82,7 @@ class Dwdea_Members
     }
 
     public function member_list()
-    {    	
+    {
         require_once 'includes/class_member_wp_list_table.php';
     }
 
