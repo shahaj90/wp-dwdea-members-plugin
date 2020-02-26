@@ -86,9 +86,17 @@ class Dwdea_Members
         require_once 'includes/class_member_wp_list_table.php';
     }
 
+    public function member_list_shortcode()
+    {
+        require_once 'views/member_list_shortcode.php';
+    }
+
 } //End class
 
 $dwdea_members = new Dwdea_Members();
 
 //Activation plugin
 register_activation_hook(__FILE__, [$dwdea_members, 'activate']);
+
+//Register shortcode
+add_shortcode('dwdea-member-list', [$dwdea_members,'member_list_shortcode']);
